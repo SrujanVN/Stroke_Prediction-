@@ -1,0 +1,16 @@
+Model and scaler loaded successfully.
+Inputs: Age=78, HT=1, HD=1, Glucose=160, BMI=32, Smoking=smokes
+Probability: 2.71%
+------------------------------
+Inputs: Age=80, HT=1, HD=1, Glucose=160, BMI=32, Smoking=smokes
+Probability: 5.01%
+------------------------------
+Inputs: Age=80, HT=1, HD=1, Glucose=200, BMI=32, Smoking=smokes
+Probability: 8.18%
+------------------------------
+Inputs: Age=75, HT=1, HD=1, Glucose=250, BMI=35, Smoking=smokes
+Probability: 53.76%
+------------------------------
+Inputs: Age=60, HT=1, HD=1, Glucose=250, BMI=35, Smoking=smokes
+Probability: 43.99%
+------------------------------

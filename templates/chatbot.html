@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StrokeShield - AI Health Assistant</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <script>
+        // Set dark mode as default
+        if (!('theme' in localStorage)) {
+            localStorage.theme = 'dark';
+        }
+        if (localStorage.theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #14b8a6 100%);
+            min-height: 100vh;
+        }
+
+        body.dark {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        }
+
+        .chat-message {
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .typing-indicator span {
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            30% {
+                transform: translateY(-8px);
+                opacity: 1;
+            }
+        }
+
+        /* Smooth scroll */
+        #chat-messages {
+            scroll-behavior: smooth;
+        }
+
+        /* Typing cursor effect */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/"
+                        class="text-2xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent cursor-pointer">StrokeShield</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/#features"
+                        class="text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium">Features</a>
+                    <a href="/#about"
+                        class="text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium">About</a>
+                    <a href="/assessment"
+                        class="text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium">Assessment</a>
+                    <a href="/chatbot"
+                        class="text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium">AI
+                        Assistant</a>
+                    <a href="/assessment"
+                        class="px-6 py-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-full font-semibold hover:shadow-lg transition-all transform hover:scale-105">Get
+                        Started</a>
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" type="button"
+                        class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                fill-rule="evenodd" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8 text-white">
+                <h1 class="text-4xl font-bold mb-4">💬 AI Health Assistant</h1>
+                <p class="text-xl text-white/90">I'm here to help you understand stroke prevention, symptoms, and care
+                </p>
+            </div>
+
+            <!-- Chat Container -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                <!-- Chat Messages -->
+                <div id="chat-messages" class="h-[500px] overflow-y-auto p-6 space-y-4">
+                    <!-- Welcome Message -->
+                    <div class="chat-message flex items-start space-x-3">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-full bg-gradient-to-r from-teal-600 to-cyan-600 flex items-center justify-center text-white shadow-lg">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div
+                            class="flex-1 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl rounded-tl-none p-4 shadow-md border border-teal-100 dark:border-gray-600">
+                            <p class="text-gray-800 dark:text-gray-200 font-medium mb-2">
+                                Hello! Hello! I'm your compassionate AI health assistant, here to support you with
+                                stroke
+                                awareness and prevention.
+                            </p>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm">
+                                I can help you with:
+                            </p>
+                            <ul class="mt-2 ml-4 text-gray-700 dark:text-gray-300 text-sm space-y-1">
+                                <li>Warning signs & FAST acronym</li>
+                                <li>Risk factors & prevention</li>
+                                <li>Emergency procedures</li>
+                                <li>Recovery & rehabilitation</li>
+                                <li>Lifestyle modifications</li>
+                            </ul>
+                            <p class="mt-3 text-gray-800 dark:text-gray-200 text-sm font-medium">
+                                Feel free to ask me anything - I'm here to help!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div
+                    class="border-t border-gray-200 dark:border-gray-700 p-4 bg-gradient-to-r from-gray-50 to-teal-50 dark:from-gray-900 dark:to-gray-800">
+                    <form id="chat-form" class="flex space-x-3">
+                        <input type="text" id="user-input"
+                            placeholder="Ask me anything about stroke prevention, symptoms..."
+                            class="flex-1 px-4 py-3 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent shadow-sm"
+                            autocomplete="off">
+                        <button type="submit"
+                            class="px-8 py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-full font-semibold hover:from-teal-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all transform hover:scale-105 shadow-lg">
+                            <span class="flex items-center">
+                                Send
+                                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="mt-6 text-center text-white/90 text-sm bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                <p><strong>⚕️ Medical Disclaimer:</strong> This AI provides general information for educational purposes
+                    only. It is NOT a substitute for professional medical advice, diagnosis, or treatment. For
+                    emergencies, call 911 immediately.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 StrokeShield. All rights reserved. This tool is for informational purposes only.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // Theme Toggle
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleButton = document.getElementById('theme-toggle');
+
+        const setIconState = () => {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                themeToggleLightIcon.classList.remove('hidden');
+                themeToggleDarkIcon.classList.add('hidden');
+            } else {
+                themeToggleDarkIcon.classList.remove('hidden');
+                themeToggleLightIcon.classList.add('hidden');
+            }
+        };
+
+        setIconState();
+
+        themeToggleButton.addEventListener('click', function () {
+            document.documentElement.classList.toggle('dark');
+            document.body.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            setIconState();
+        });
+
+        // Chat Logic with Typing Effect
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const chatMessages = document.getElementById('chat-messages');
+        let isTyping = false;
+
+        function formatMessage(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold">$1</strong>')
+                .replace(/🚨/g, '<span class="text-2xl">🚨</span>')
+                .replace(/⚠️/g, '<span class="text-xl">⚠️</span>')
+                .replace(/✅/g, '<span class="text-xl">✅</span>')
+                .replace(/💡/g, '<span class="text-xl">💡</span>')
+                .replace(/🔴/g, '<span class="text-xl">🔴</span>')
+                .replace(/❤️/g, '<span class="text-xl">❤️</span>')
+                .replace(/💊/g, '<span class="text-xl">💊</span>')
+                .replace(/🏥/g, '<span class="text-xl">🏥</span>')
+                .replace(/💪/g, '<span class="text-xl">💪</span>')
+                .replace(/\n\n/g, '</p><p class="mt-2">')
+                .replace(/\n/g, '<br>');
+        }
+
+        function autoScroll() {
+            chatMessages.scrollTo({
+                top: chatMessages.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function addMessage(text, isUser = false, useTypingEffect = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message flex items-start space-x-3 ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'flex-shrink-0';
+
+            if (isUser) {
+                avatar.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 flex items-center justify-center text-white shadow-lg">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                `;
+            } else {
+                avatar.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-teal-600 to-cyan-600 flex items-center justify-center text-white shadow-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                `;
+            }
+
+            const bubble = document.createElement('div');
+            bubble.className = `flex-1 rounded-2xl p-4 shadow-md transition-all ${isUser
+                ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-tr-none'
+                : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-tl-none border border-gray-200 dark:border-gray-600'
+                }`;
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(bubble);
+            chatMessages.appendChild(messageDiv);
+
+            if (useTypingEffect && !isUser) {
+                typeMessage(bubble, text);
+            } else {
+                bubble.innerHTML = '<p>' + formatMessage(text) + '</p>';
+                autoScroll();
+            }
+        }
+
+        function typeMessage(element, text, speed = 12) {
+            isTyping = true;
+            const formattedText = formatMessage(text);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = '<p>' + formattedText + '</p>';
+            const plainText = tempDiv.textContent || tempDiv.innerText;
+
+            let index = 0;
+            element.innerHTML = '<p class="typing-cursor"></p>';
+            const p = element.querySelector('p');
+
+            function typeChar() {
+                if (index < plainText.length) {
+                    p.textContent = plainText.substring(0, index + 1);
+                    p.className = 'typing-cursor';
+                    index++;
+                    autoScroll();
+                    setTimeout(typeChar, speed);
+                } else {
+                    element.innerHTML = '<p>' + formattedText + '</p>';
+                    isTyping = false;
+                    autoScroll();
+                }
+            }
+
+            typeChar();
+        }
+
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'chat-message flex items-start space-x-3';
+            typingDiv.innerHTML = `
+                <div class="flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-teal-600 to-cyan-600 flex items-center justify-center text-white shadow-lg animate-pulse">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1 bg-white dark:bg-gray-700 rounded-2xl rounded-tl-none p-4 shadow-md border border-gray-200 dark:border-gray-600">
+                    <div class="typing-indicator flex space-x-2 items-center">
+                        <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span>
+                        <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span>
+                        <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">Thinking...</span>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            autoScroll();
+        }
+
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message || isTyping) return;
+
+            addMessage(message, true);
+            userInput.value = '';
+            userInput.focus();
+
+            addTypingIndicator();
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+                removeTypingIndicator();
+
+                if (data.response) {
+                    addMessage(data.response, false, true);
+                } else {
+                    addMessage('I apologize for the inconvenience. Could you please try rephrasing your question? I\'m here to help!', false, true);
+                }
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('I\'m having trouble connecting right now. Please check your connection and try again. I\'ll be here when you\'re ready! 💙', false, true);
+                console.error('Error:', error);
+            }
+        });
+
+        window.addEventListener('load', () => {
+            autoScroll();
+            userInput.focus();
+        });
+    </script>
+</body>
+
+</html>

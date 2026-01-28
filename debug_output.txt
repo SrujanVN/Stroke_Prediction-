@@ -1,0 +1,13 @@
+Model and scaler loaded successfully.
+Inputs: Age=65, HT=1, HD=1, Glucose=160, BMI=32, Smoking=smokes
+Probability: 3.08% -> Low Risk
+------------------------------
+Inputs: Age=75, HT=1, HD=1, Glucose=200, BMI=35, Smoking=smokes
+Probability: 4.26% -> Low Risk
+------------------------------
+Inputs: Age=82, HT=1, HD=1, Glucose=270, BMI=40, Smoking=smokes
+Probability: 41.63% -> High Risk
+------------------------------
+Inputs: Age=50, HT=0, HD=0, Glucose=100, BMI=25, Smoking=never smoked
+Probability: 1.04% -> Low Risk
+------------------------------

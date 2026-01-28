@@ -1,0 +1,394 @@
+/* Font */
+.font-poppins {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Spinner */
+.spinner {
+    border: 4px solid transparent;
+    border-top: 4px solid #3b82f6;
+    /* blue-600 */
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+}
+
+/* Larger spinner for the overlay */
+.spinner-large {
+    border: 6px solid transparent;
+    border-top-color: #3b82f6;
+    width: 50px;
+    height: 50px;
+    animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Fade In */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Form Fieldset Styling */
+fieldset {
+    border: 1px solid #e5e7eb;
+    /* border-gray-200 */
+    border-radius: 0.75rem;
+    /* rounded-xl */
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.dark fieldset {
+    border-color: #1e293b;
+    /* slate-800 */
+}
+
+legend {
+    padding: 0 0.75rem;
+    margin-left: 0.5rem;
+    font-size: 0.8125rem;
+    /* slightly larger */
+    font-weight: 600;
+    /* font-semibold */
+    color: #6b7280;
+    /* text-gray-500 */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dark legend {
+    color: #64748b;
+    /* text-slate-500 */
+}
+
+/* Input focus transition */
+.form-input {
+    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.form-input:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Tooltip Styling */
+.tooltip-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    width: 220px;
+    background-color: #1f2937;
+    /* gray-800 */
+    color: #fff;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 10;
+    bottom: 140%;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    pointer-events: none;
+    /* Prevent the tooltip from interfering with mouse events */
+}
+
+.tooltip-container:hover .tooltip-text,
+.tooltip-container:focus-within .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Add an arrow to the tooltip */
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #1f2937 transparent transparent transparent;
+    /* gray-800 */
+}
+
+/* Header shadow on scroll */
+.header-scrolled {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Custom select arrow */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Remove default arrow */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+/* Update select arrow color for dark mode */
+.dark select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+}
+
+
+/* Risk factor highlighting */
+.risk-highlight {
+    border-color: #ef4444 !important;
+    /* red-500 */
+}
+
+/* Chatbot typing indicator */
+.typing-dots span {
+    height: 8px;
+    width: 8px;
+    background-color: #9ca3af;
+    /* gray-400 */
+    border-radius: 50%;
+    display: inline-block;
+    animation: wave 1.3s infinite;
+}
+
+.typing-dots span:nth-of-type(2) {
+    animation-delay: -1.1s;
+}
+
+.typing-dots span:nth-of-type(3) {
+    animation-delay: -0.9s;
+}
+
+@keyframes wave {
+
+    0%,
+    60%,
+    100% {
+        transform: initial;
+    }
+
+    30% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Styles for PDF capture */
+.pdf-capture {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    /* gray-900 */
+}
+
+/* Force backgrounds to white with a border */
+.pdf-capture .bg-white,
+.pdf-capture .dark\:bg-gray-800,
+.pdf-capture .dark\:bg-gray-700\/50,
+.pdf-capture .bg-blue-50\/50,
+.pdf-capture .dark\:bg-blue-900\/10 {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    /* gray-300 */
+}
+
+/* Make all standard text dark / black */
+.pdf-capture h3,
+.pdf-capture h4,
+.pdf-capture p,
+.pdf-capture li,
+.pdf-capture span,
+.pdf-capture div {
+    color: #111827 !important;
+    /* gray-900 */
+}
+
+/* Preserve specific semantic text colors (High Importance) */
+.pdf-capture .text-red-600,
+.pdf-capture .dark\:text-red-500,
+.pdf-capture .text-red-500 {
+    color: #dc2626 !important;
+    /* red-600 */
+}
+
+.pdf-capture .text-green-600,
+.pdf-capture .text-green-500 {
+    color: #16a34a !important;
+    /* green-600 */
+}
+
+.pdf-capture .text-yellow-600,
+.pdf-capture .text-yellow-500 {
+    color: #d97706 !important;
+    /* yellow-600 */
+}
+
+/* Fix "Risk Score" sub-label which was too light */
+.pdf-capture span.text-gray-400 {
+    color: #4b5563 !important;
+    /* gray-600 - darker for readability */
+}
+
+/* Chart Corrections */
+/* Do NOT force stroke color on the gauge fill, or it loses its red/green status */
+.pdf-capture svg path {
+    stroke: #d1d5db;
+    /* Default gray for background arcs */
+}
+
+.pdf-capture svg path#gauge-fill {
+    stroke: inherit !important;
+    /* Respect the inline stroke color attribute */
+}
+
+.pdf-capture .text-blue-600 {
+    color: #2563eb !important;
+}
+
+/* Hide interactions */
+.pdf-capture button {
+    display: none !important;
+}
+
+/* Custom Range Slider Styles */
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #3b82f6;
+    /* blue-600 */
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -5px;
+    /* Vertically center thumb */
+    transition: background 0.2s ease-in-out;
+}
+
+.range-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #3b82f6;
+    /* blue-600 */
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s ease-in-out;
+}
+
+.range-slider:hover::-webkit-slider-thumb {
+    background: #2563eb;
+    /* blue-700 */
+}
+
+.range-slider:hover::-moz-range-thumb {
+    background: #2563eb;
+    /* blue-700 */
+}
+
+/* Probability Gauge */
+.gauge-container {
+    width: 150px;
+    height: 75px;
+    position: relative;
+    overflow: hidden;
+}
+
+.gauge-bg,
+.gauge-fill {
+    width: 100%;
+    height: 200%;
+    border-radius: 50% 50% 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 20px solid #e5e7eb;
+    /* gray-200 */
+    box-sizing: border-box;
+    transform: rotate(180deg);
+}
+
+.dark .gauge-bg {
+    border-color: #1e293b;
+    /* slate-800 */
+}
+
+.gauge-fill {
+    border-color: #3b82f6;
+    /* blue-500 */
+    transform-origin: center bottom;
+    transition: transform 0.8s ease-in-out;
+}
+
+.gauge-cover {
+    width: 70%;
+    height: 140%;
+    background: #ffffff;
+    /* white */
+}
+
+.dark .gauge-cover {
+    background: #0f172a;
+    /* slate-900 */
+}
+
+/* Learn More Link */
+.learn-more-link {
+    font-size: 0.75rem;
+    /* text-xs */
+}
+
+/* Learn More Link */
+.learn-more-link {
+    font-size: 0.75rem;
+    /* text-xs */
+}
+
+/* Custom Scrollbar for Recommendations */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e5e7eb;
+    /* gray-200 */
+    border-radius: 10px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #374151;
+    /* gray-700 */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+    /* blue-500 */
+}
