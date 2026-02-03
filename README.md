@@ -10,6 +10,7 @@ A comprehensive AI-powered web application for predicting stroke risk and provid
 ## 📋 Table of Contents
 
 - [Overview](#overview)
+- [Live Demo](#live-demo)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Installation](#installation)
@@ -29,6 +30,18 @@ The **Stroke Risk Prediction System** is a machine learning-powered web applicat
 - Help users understand warning signs and prevention strategies
 
 This tool aims to increase stroke awareness and encourage preventive healthcare measures. **Important:** This is an educational tool and NOT a substitute for professional medical advice.
+
+## 🎥 Live Demo
+
+Check out the live demonstration of **STROKE PREDICTION POWERED BY MACHINE LEARNING** in action:
+
+[![Watch the Demo](https://img.youtube.com/vi/LHUcyvJyzzo/0.jpg)](https://youtu.be/LHUcyvJyzzo)
+
+[**Watch the Demo Video**](https://youtu.be/LHUcyvJyzzo)
+
+A quick walkthrough of the project in action.
+
+> **Note:** Since the project is not yet deployed, watch the video above to see the features in real-time.
 
 ## ✨ Features
 
